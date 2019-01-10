@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
             get("/") {
 
                 val response = khttp.get(
-                    url = config[GitlabSpec.baseUrl] + "/projects/1438/merge_requests",
+                    url = config[GitlabSpec.domain] + config[GitlabSpec.apiPath] + "/projects/1438/merge_requests",
 //                    params = mapOf("state" to "opened"),
                     headers = mapOf("PRIVATE-TOKEN" to config[GitlabSpec.privateToken])
                 )
@@ -39,7 +39,7 @@ fun main(args: Array<String>) {
                 val gitlabMrListType = Types.newParameterizedType(List::class.java, GitlabMergeRequest::class.java)
                 val gitlabMr = moshi.adapter<List<GitlabMergeRequest>>(gitlabMrListType)
                     .fromJson(response.text)
-                val mr = gitlabMr?.map { it.toMergeRequest() }
+                val mr = gitlabMr?.map { it.toMergeRequest(config[GitlabSpec.domain]) }
 
                 val mrListType = Types.newParameterizedType(List::class.java, MergeRequest::class.java)
                 val body = moshi.adapter<List<MergeRequest>>(mrListType)

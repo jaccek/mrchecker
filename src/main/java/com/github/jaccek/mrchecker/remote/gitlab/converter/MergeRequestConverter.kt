@@ -4,12 +4,12 @@ import com.github.jaccek.mrchecker.dto.MergeRequest
 import com.github.jaccek.mrchecker.remote.gitlab.dto.GitlabMergeRequest
 
 // TODO: missing fields
-fun GitlabMergeRequest.toMergeRequest() =
+fun GitlabMergeRequest.toMergeRequest(gitlabDomain: String) =
     MergeRequest(
         author = author.name,
         creationDate = creationDate,
         link = link,
-        project = getProjectName(link),
+        project = getProjectName(gitlabDomain, link),
         pipelineStatus = "TODO",
         upVotes = upVotes,
         downVotes = downVotes,
@@ -18,7 +18,7 @@ fun GitlabMergeRequest.toMergeRequest() =
         targetBranch = targetBranch
     )
 
-private fun getProjectName(link: String): String {
-    val regex = """gitlab\.rst\.com\.pl/(.*)/merge_requests""".toRegex()    // TODO: fix regex - domain from config!!!
+private fun getProjectName(gitlabDomain: String, link: String): String {
+    val regex = "$gitlabDomain/(.*)/merge_requests".toRegex()    // TODO: fix regex - domain from config!!!
     return regex.find(link)?.destructured?.component1() ?: ""
 }
