@@ -10,6 +10,8 @@ data class GitlabMergeRequest(
     val id: Int,
     val title: String,
 
+    val author: GitlabUser,
+
     @Json(name = "created_at")
     val creationDate: Date,
 
@@ -24,5 +26,8 @@ data class GitlabMergeRequest(
     val downVotes: Int,
 
     @Json(name = "work_in_progress")
-    val workInProgress: Boolean
+    val workInProgress: Boolean,
+
+    @Json(name = "web_url")
+    val link: String
 )
